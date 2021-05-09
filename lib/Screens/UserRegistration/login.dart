@@ -71,7 +71,6 @@ class _UserLoginPageState extends State<UserLoginPage> {
     String token = responseBody["token"];
     print(token);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userToken', token);
     await prefs.setString('userData', jsonEncode(responseBody));
     setState(() {
       isLoading = false;
