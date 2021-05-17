@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'package:busapp/Screens/HomePage/userhomepage.dart';
+import 'package:busapp/Screens/HomePage/conductorHomePage.dart';
 import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class UserRegistrationPage extends StatefulWidget {
+class ConductrRegistration extends StatefulWidget {
   @override
-  _UserRegistrationPageState createState() => _UserRegistrationPageState();
+  _ConductrRegistrationState createState() => _ConductrRegistrationState();
 }
 
-class _UserRegistrationPageState extends State<UserRegistrationPage> {
+class _ConductrRegistrationState extends State<ConductrRegistration> {
   String firstName;
   String lastName;
   bool isStudent = false;
@@ -26,11 +26,12 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       isLoading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String accessToken = jsonDecode(prefs.get('userData'))["token"];
+    String accessToken = jsonDecode(prefs.get('coductorData'))["token"];
     print(accessToken);
     try {
       var res = await http.post(
-        Uri.parse("https://smart-bus-pass.herokuapp.com/api/user_registration"),
+        Uri.parse(
+            "https://smart-bus-pass.herokuapp.com/api/conductor/conductor_registration"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "token $accessToken",
@@ -39,7 +40,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
           {
             'firstName': firstName,
             'lastName': lastName,
-            'isStudent': isStudent,
             'phoneNo': phoneNumber,
           },
         ),
@@ -47,11 +47,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       print(res.body);
       print(res.statusCode);
       if (res.statusCode == 200) {
-        await prefs.setString('userData', jsonEncode(res.body));
+        await prefs.setString('coductorData', jsonEncode(res.body));
         Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
-            builder: (context) => UserHomePage(),
+            builder: (context) => ConductorHomePage(),
           ),
         );
         return;
@@ -72,7 +72,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("User Registration"),
+        title: Text("Conductor Registration"),
       ),
       body: Form(
         key: _formKey,
@@ -113,71 +113,6 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 25),
-              Text("Are you a student ?"),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        isStudent = true;
-                      });
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        isStudent ? Colors.blue : Colors.white,
-                      ),
-                      padding: MaterialStateProperty.all(
-                        EdgeInsets.symmetric(
-                          horizontal: 35,
-                          vertical: 15,
-                        ),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      "Yes",
-                      style: TextStyle(
-                        color: isStudent ? Colors.white : Colors.black87,
-                      ),
-                    ),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        isStudent = false;
-                      });
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        !isStudent ? Colors.blue : Colors.white,
-                      ),
-                      padding: MaterialStateProperty.all(
-                        EdgeInsets.symmetric(
-                          horizontal: 35,
-                          vertical: 15,
-                        ),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      "No",
-                      style: TextStyle(
-                        color: !isStudent ? Colors.white : Colors.black87,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               SizedBox(height: 50),
               isLoading
                   ? Center(
@@ -200,7 +135,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                           ),
                         ),
                       ),
-                      child: Text("Apply for Pass"),
+                      child: Text("Register as conductor"),
                     ),
             ],
           ),

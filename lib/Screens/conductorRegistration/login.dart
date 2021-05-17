@@ -1,36 +1,36 @@
 import 'dart:convert';
-import 'package:busapp/Screens/HomePage/userhomepage.dart';
-import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
+import 'package:busapp/Screens/HomePage/conductorHomePage.dart';
+import 'package:busapp/Screens/conductorRegistration/conductorRegistration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserLoginPage extends StatefulWidget {
+class ConductorLogin extends StatefulWidget {
   @override
-  _UserLoginPageState createState() => _UserLoginPageState();
+  _ConductorLoginState createState() => _ConductorLoginState();
 }
 
-class _UserLoginPageState extends State<UserLoginPage> {
+class _ConductorLoginState extends State<ConductorLogin> {
   bool isLoading = false;
   String accessToken;
 
-  var userData;
-  userLogin() async {
-    // Check local data
+  var conductorData;
+  conductorLogin() async {
+    // Check offline data
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var data = prefs.get('userData');
+    var data = prefs.get('coductorData');
     if (data != null) {
       Navigator.pushReplacement(
         context,
         CupertinoPageRoute(
-          builder: (context) => UserHomePage(),
+          builder: (context) => ConductorHomePage(),
         ),
       );
       return;
     }
-    // Login again
+// Login again
     setState(() {
       isLoading = true;
     });
@@ -40,16 +40,11 @@ class _UserLoginPageState extends State<UserLoginPage> {
     GoogleSignInAuthentication googleKeys = await accountInfo.authentication;
     accessToken = googleKeys.accessToken;
     print(accessToken);
-    // Got access token
-    print(
-      jsonEncode(
-        {
-          "accessToken": accessToken,
-        },
-      ),
-    );
+
+    //  send data to backend
+
     var res = await http.post(
-      Uri.parse("https://smart-bus-pass.herokuapp.com/api/login"),
+      Uri.parse("https://smart-bus-pass.herokuapp.com/api/conductor/login"),
       body: {
         "accessToken": accessToken,
       },
@@ -59,7 +54,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
     var responseBody = jsonDecode(res.body);
     String token = responseBody["token"];
     print(token);
-    await prefs.setString('userData', jsonEncode(responseBody));
+    await prefs.setString('coductorData', jsonEncode(responseBody));
     setState(() {
       isLoading = false;
     });
@@ -67,14 +62,14 @@ class _UserLoginPageState extends State<UserLoginPage> {
       Navigator.pushReplacement(
         context,
         CupertinoPageRoute(
-          builder: (context) => UserRegistrationPage(),
+          builder: (context) => ConductrRegistration(),
         ),
       );
     else {
       Navigator.pushReplacement(
         context,
         CupertinoPageRoute(
-          builder: (context) => UserHomePage(),
+          builder: (context) => ConductorHomePage(),
         ),
       );
     }
@@ -82,7 +77,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
 
   @override
   void initState() {
-    userData = userLogin();
+    conductorData = conductorLogin();
     super.initState();
   }
 
@@ -90,26 +85,20 @@ class _UserLoginPageState extends State<UserLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("User Login"),
+          title: Text("Conductor Login"),
         ),
         body: FutureBuilder(
-          future: userData,
+          future: conductorData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Center(
                 child: Text("has data"),
               );
             } else {
-              return Center(
-                child: isLoading
-                    ? CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: () {
-                          userLogin();
-                        },
-                        child: Text("Login"),
-                      ),
-              );
+              return Center(child: CircularProgressIndicator());
+              // return Center(
+              //   child: CircularProgressIndicator(),
+              // );
             }
           },
         ));

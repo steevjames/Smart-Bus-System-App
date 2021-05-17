@@ -1,35 +1,35 @@
 import 'dart:convert';
-import 'package:busapp/Screens/UserRegistration/login.dart';
+import 'package:busapp/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatefulWidget {
+class ConductorHomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _ConductorHomePageState createState() => _ConductorHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  var userData;
-  getUserData() async {
+class _ConductorHomePageState extends State<ConductorHomePage> {
+  var conductorData;
+  getConductorData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.get('userData');
+    return prefs.get('coductorData');
   }
 
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('userData');
-    Navigator.pushReplacement(
+    prefs.remove('coductorData');
+    Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => UserLoginPage(),
+        builder: (context) => HomePage(),
       ),
     );
   }
 
   initState() {
-    userData = getUserData();
+    conductorData = getConductorData();
     super.initState();
   }
 
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Homepage"),
+        title: Text("Conductor Home"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20),
             Text("Welcome"),
             FutureBuilder(
-              future: userData,
+              future: conductorData,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var userData = jsonDecode(snapshot.data);
