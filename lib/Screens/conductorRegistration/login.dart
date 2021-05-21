@@ -21,14 +21,19 @@ class _ConductorLoginState extends State<ConductorLogin> {
     // Check offline data
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var data = prefs.get('coductorData');
+
     if (data != null) {
-      Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => ConductorHomePage(),
-        ),
-      );
-      return;
+      print(data);
+      print(jsonDecode(data));
+      if (jsonDecode(data)["registered"] == true) {
+        Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => ConductorHomePage(),
+          ),
+        );
+        return;
+      }
     }
 // Login again
     setState(() {

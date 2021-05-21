@@ -21,15 +21,19 @@ class _UserLoginPageState extends State<UserLoginPage> {
     // Check local data
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var data = prefs.get('userData');
+    // If userdata present
     if (data != null) {
-      Navigator.pushReplacement(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => UserHomePage(),
-        ),
-      );
-      return;
+      if (jsonDecode(data)["registered"] == true) {
+        Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => UserHomePage(),
+          ),
+        );
+        return;
+      }
     }
+
     // Login again
     setState(() {
       isLoading = true;
