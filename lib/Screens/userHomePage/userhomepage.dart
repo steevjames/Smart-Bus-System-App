@@ -20,7 +20,7 @@ class _UserHomePageState extends State<UserHomePage> {
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('userData');
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       CupertinoPageRoute(
         builder: (context) => HomePage(),
@@ -50,7 +50,6 @@ class _UserHomePageState extends State<UserHomePage> {
                 if (snapshot.hasData) {
                   var userData = jsonDecode(snapshot.data);
                   print(userData);
-                  print(userData[0]);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -59,13 +58,17 @@ class _UserHomePageState extends State<UserHomePage> {
                         Text(
                           userData.toString(),
                         ),
-                        // Text(userData["userData"][0]["firstName"].toString() +
-                        //     ' ' +
-                        //     userData["userData"][0]["lastName"].toString()),
-                        // Text("Account balance: " +
-                        //     userData["userData"][0]["accBalance"].toString()),
-                        // Text(userData["phoneNo"].toString()),
-                        // Text(userData["userData"][0]["email"].toString()),
+                        Image.network(
+                          userData["picture"],
+                          width: 100,
+                        ),
+                        Text(userData["userDetails"]["firstName"].toString() +
+                            ' ' +
+                            userData["userDetails"]["lastName"].toString()),
+                        Text("Account balance: " +
+                            userData["userDetails"]["accBalance"].toString()),
+                        Text(userData["userDetails"]["phoneNo"].toString()),
+                        Text(userData["userDetails"]["email"].toString()),
                         SizedBox(height: 50),
                         QrImage(
                           data: userData.toString(),
@@ -73,6 +76,26 @@ class _UserHomePageState extends State<UserHomePage> {
                           size: 200.0,
                         ),
                         SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text("View travel history"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text("Add balance"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text("Refresh QR"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text("Update Profile"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text("Report Complaint"),
+                        ),
                         ElevatedButton(
                           onPressed: () {
                             logout();

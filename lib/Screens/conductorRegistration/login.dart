@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:busapp/Screens/HomePage/conductorHomePage.dart';
+import 'package:busapp/Screens/ConductorHomePage/conductorHomePage.dart';
 import 'package:busapp/Screens/conductorRegistration/conductorRegistration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

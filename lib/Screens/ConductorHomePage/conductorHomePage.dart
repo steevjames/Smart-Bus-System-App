@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:busapp/Screens/HomePage/qrCodeScan.dart';
+import 'package:busapp/Screens/ConductorHomePage/Components/qrCodeScan.dart';
 import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +21,7 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('coductorData');
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       CupertinoPageRoute(
         builder: (context) => HomePage(),
@@ -96,6 +96,13 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                             alertDialog(text: "Coming soon", context: context);
                           },
                           child: Text("Start Trip"),
+                        ),
+                        SizedBox(height: 30),
+                        ElevatedButton(
+                          onPressed: () {
+                            alertDialog(text: "Coming soon", context: context);
+                          },
+                          child: Text("Trip History"),
                         ),
                         SizedBox(height: 30),
                         ElevatedButton(

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:busapp/Screens/HomePage/userhomepage.dart';
+import 'package:busapp/Screens/userHomePage/userhomepage.dart';
 import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +59,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
     var responseBody = jsonDecode(res.body);
     String token = responseBody["token"];
     print(token);
-    await prefs.setString('userData', jsonEncode(responseBody));
+    await prefs.setString('userData', res.body);
     setState(() {
       isLoading = false;
     });
