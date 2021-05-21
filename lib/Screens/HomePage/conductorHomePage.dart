@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:busapp/Screens/HomePage/qrCodeScan.dart';
+import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/main.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,6 +29,18 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
     );
   }
 
+  scanQR() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QrcodeScan(),
+      ),
+    ).then((value) {
+      if (value == null) return;
+      alertDialog(text: value.toString(), context: context);
+    });
+  }
+
   initState() {
     conductorData = getConductorData();
     super.initState();
@@ -49,6 +62,7 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var userData = jsonDecode(snapshot.data);
+                  print(userData["conductorDetails"]["phoneNo"]);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -57,13 +71,33 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                         Text(
                           userData.toString(),
                         ),
-                        SizedBox(height: 50),
-                        QrImage(
-                          data: userData.toString(),
-                          version: QrVersions.auto,
-                          size: 200.0,
+                        Image.network(
+                          userData["picture"],
+                          width: 100,
                         ),
+                        Text(userData["conductorDetails"]["firstName"] +
+                            " " +
+                            userData["conductorDetails"]["lastName"]),
+                        Text(userData["conductorDetails"]["email"].toString()),
+                        Text(
+                          userData["conductorDetails"]["phoneNo"],
+                        ),
+                        SizedBox(height: 50),
                         SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            scanQR();
+                          },
+                          child: Text("Scan QR"),
+                        ),
+                        SizedBox(height: 30),
+                        ElevatedButton(
+                          onPressed: () {
+                            alertDialog(text: "Coming soon", context: context);
+                          },
+                          child: Text("Start Trip"),
+                        ),
+                        SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () {
                             logout();

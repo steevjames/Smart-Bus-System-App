@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:busapp/Screens/UserRegistration/login.dart';
 import 'package:busapp/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -50,6 +49,8 @@ class _UserHomePageState extends State<UserHomePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var userData = jsonDecode(snapshot.data);
+                  print(userData);
+                  print(userData[0]);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -58,6 +59,13 @@ class _UserHomePageState extends State<UserHomePage> {
                         Text(
                           userData.toString(),
                         ),
+                        // Text(userData["userData"][0]["firstName"].toString() +
+                        //     ' ' +
+                        //     userData["userData"][0]["lastName"].toString()),
+                        // Text("Account balance: " +
+                        //     userData["userData"][0]["accBalance"].toString()),
+                        // Text(userData["phoneNo"].toString()),
+                        // Text(userData["userData"][0]["email"].toString()),
                         SizedBox(height: 50),
                         QrImage(
                           data: userData.toString(),

@@ -54,7 +54,7 @@ class _ConductorLoginState extends State<ConductorLogin> {
     var responseBody = jsonDecode(res.body);
     String token = responseBody["token"];
     print(token);
-    await prefs.setString('coductorData', jsonEncode(responseBody));
+    await prefs.setString('coductorData', res.body);
     setState(() {
       isLoading = false;
     });
