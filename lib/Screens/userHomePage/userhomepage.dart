@@ -1,4 +1,9 @@
 import 'dart:convert';
+import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
+import 'package:busapp/Screens/userHomePage/Components/addBalance.dart';
+import 'package:busapp/Screens/userHomePage/Components/refreshQr.dart';
+import 'package:busapp/Screens/userHomePage/Components/reportComplaint.dart';
+import 'package:busapp/Screens/userHomePage/Components/travelHistory.dart';
 import 'package:busapp/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -77,23 +82,59 @@ class _UserHomePageState extends State<UserHomePage> {
                         ),
                         SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => UserTravelLog(),
+                              ),
+                            );
+                          },
                           child: Text("View travel history"),
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => AddBalance(),
+                              ),
+                            );
+                          },
                           child: Text("Add balance"),
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => RefreshQR(),
+                              ),
+                            );
+                          },
                           child: Text("Refresh QR"),
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) =>
+                                    UserRegistrationPage(updateProfile: true),
+                              ),
+                            );
+                          },
                           child: Text("Update Profile"),
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => ReportComplaint(),
+                              ),
+                            );
+                          },
                           child: Text("Report Complaint"),
                         ),
                         ElevatedButton(

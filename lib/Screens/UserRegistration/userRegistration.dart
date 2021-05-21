@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class UserRegistrationPage extends StatefulWidget {
+  final bool updateProfile;
+  UserRegistrationPage({this.updateProfile = false});
   @override
   _UserRegistrationPageState createState() => _UserRegistrationPageState();
 }
@@ -48,7 +50,9 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       print(res.statusCode);
       if (res.statusCode == 200) {
         await prefs.setString('userData', jsonEncode(res.body));
-        Navigator.pushReplacement(
+
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.push(
           context,
           CupertinoPageRoute(
             builder: (context) => UserHomePage(),
@@ -72,7 +76,8 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("User Registration"),
+        title:
+            Text(widget.updateProfile ? "Update profile" : "User Registration"),
       ),
       body: Form(
         key: _formKey,
@@ -200,7 +205,11 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                           ),
                         ),
                       ),
-                      child: Text("Apply for Pass"),
+                      child: Text(
+                        widget.updateProfile
+                            ? "Update Profile"
+                            : "Apply for Pass",
+                      ),
                     ),
             ],
           ),
