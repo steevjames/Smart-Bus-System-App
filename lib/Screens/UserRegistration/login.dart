@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:busapp/Screens/userHomePage/userhomepage.dart';
 import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
+import 'package:busapp/Widgets/alert_dialog.dart';
+import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -40,7 +42,12 @@ class _UserLoginPageState extends State<UserLoginPage> {
     });
     GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
     await googleSignIn.signOut();
-    GoogleSignInAccount accountInfo = await googleSignIn.signIn();
+    GoogleSignInAccount accountInfo =
+        await googleSignIn.signIn().onError((error, stackTrace) {
+      Navigator.pop(context);
+      alertDialog(text: "An error occured", context: context);
+      return;
+    });
     GoogleSignInAuthentication googleKeys = await accountInfo.authentication;
     accessToken = googleKeys.accessToken;
     print(accessToken);
@@ -94,8 +101,11 @@ class _UserLoginPageState extends State<UserLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("User Login"),
+          title: Text(""),
+          backgroundColor: primaryColor,
+          elevation: 0,
         ),
+        backgroundColor: primaryColor,
         body: FutureBuilder(
           future: userData,
           builder: (context, snapshot) {
@@ -106,7 +116,9 @@ class _UserLoginPageState extends State<UserLoginPage> {
             } else {
               return Center(
                 child: isLoading
-                    ? CircularProgressIndicator()
+                    ? CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      )
                     : ElevatedButton(
                         onPressed: () {
                           userLogin();

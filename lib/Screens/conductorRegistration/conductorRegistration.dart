@@ -47,7 +47,7 @@ class _ConductrRegistrationState extends State<ConductrRegistration> {
       print(res.body);
       print(res.statusCode);
       if (res.statusCode == 200) {
-        await prefs.setString('coductorData', jsonEncode(res.body));
+        await prefs.setString('coductorData', res.body);
         Navigator.pushReplacement(
           context,
           CupertinoPageRoute(

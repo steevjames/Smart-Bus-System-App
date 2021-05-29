@@ -51,7 +51,9 @@ class DefTemplate extends StatelessWidget {
                                 IconButton(
                                   icon: Icon(Icons.arrow_back_ios,
                                       color: Colors.white),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
                                 ),
                               ],
                             )

@@ -49,7 +49,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
       print(res.body);
       print(res.statusCode);
       if (res.statusCode == 200) {
-        await prefs.setString('userData', jsonEncode(res.body));
+        await prefs.setString('userData', res.body);
 
         Navigator.of(context).popUntil((route) => route.isFirst);
         Navigator.push(
