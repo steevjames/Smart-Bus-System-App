@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -26,17 +25,12 @@ class _QrcodeScanState extends State<QrcodeScan> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-        print("object");
-        if (result != null) {
-          Navigator.of(context).pop();
-          alertDialog(
-            text: "Scanned Data: " + result.code.toString(),
-            context: context,
-          );
-        }
-      });
+      result = scanData;
+      print("object");
+      if (result != null) {
+        controller?.dispose();
+        Navigator.of(context).pop(result.code);
+      }
     });
   }
 
@@ -61,9 +55,20 @@ class _QrcodeScanState extends State<QrcodeScan> {
         children: <Widget>[
           Expanded(
             flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
+            child: Stack(
+              children: [
+                QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                ),
+                Center(
+                  child: Image.asset(
+                    "assets/conductor/qrcodeIcon.png",
+                    width: MediaQuery.of(context).size.width * .7,
+                    color: Colors.white38,
+                  ),
+                )
+              ],
             ),
           ),
           Expanded(

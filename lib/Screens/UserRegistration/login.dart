@@ -119,12 +119,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
                     ? CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       )
-                    : ElevatedButton(
-                        onPressed: () {
-                          userLogin();
-                        },
-                        child: Text("Login"),
-                      ),
+                    : Center(),
               );
             }
           },

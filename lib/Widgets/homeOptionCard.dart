@@ -27,25 +27,36 @@ class _HomeOptionCardState extends State<HomeOptionCard> {
           ),
         ),
         padding: EdgeInsets.symmetric(vertical: 0),
-        color: Color(0xff666666),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.white,
-              child: Icon(
-                widget.icon,
-                color: primaryColor,
+        color: secondaryColor,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/pagebg.png"),
+                fit: BoxFit.cover,
               ),
             ),
-            SizedBox(width: 20),
-            Text(
-              widget.text ?? "",
-              style: TextStyle(
-                color: Colors.white,
-              ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    widget.icon,
+                    color: primaryColor,
+                  ),
+                ),
+                SizedBox(width: 20),
+                Text(
+                  widget.text ?? "",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

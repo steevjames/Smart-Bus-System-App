@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:busapp/Screens/ConductorHomePage/conductorHomePage.dart';
 import 'package:busapp/Screens/conductorRegistration/conductorRegistration.dart';
+import 'package:busapp/Widgets/alert_dialog.dart';
+import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -41,7 +43,12 @@ class _ConductorLoginState extends State<ConductorLogin> {
     });
     GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
     await googleSignIn.signOut();
-    GoogleSignInAccount accountInfo = await googleSignIn.signIn();
+    GoogleSignInAccount accountInfo =
+        await googleSignIn.signIn().onError((error, stackTrace) {
+      Navigator.pop(context);
+      alertDialog(text: "An error occured", context: context);
+      return;
+    });
     GoogleSignInAuthentication googleKeys = await accountInfo.authentication;
     accessToken = googleKeys.accessToken;
     print(accessToken);
@@ -89,23 +96,28 @@ class _ConductorLoginState extends State<ConductorLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Conductor Login"),
-        ),
-        body: FutureBuilder(
-          future: conductorData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Center(
-                child: Text("has data"),
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-              // return Center(
-              //   child: CircularProgressIndicator(),
-              // );
-            }
-          },
-        ));
+      appBar: AppBar(
+        title: Text(" "),
+        elevation: 0,
+        backgroundColor: primaryColor,
+      ),
+      backgroundColor: primaryColor,
+      body: FutureBuilder(
+        future: conductorData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Center(
+              child: Text("has data"),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 }

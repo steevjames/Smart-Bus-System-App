@@ -8,6 +8,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefTemplate(
+      footer: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Text(
+          "© Group 11",
+          style: TextStyle(color: Colors.black45, fontSize: 12),
+        ),
+      ),
       topChildren: [
         SizedBox(height: 30),
         Text(
@@ -88,40 +95,45 @@ class HomeOption extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: MaterialButton(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        color: primaryColor,
+        padding: EdgeInsets.symmetric(horizontal: 0),
+        color: secondaryColor,
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            width: 1,
-            color: primaryColor,
-          ),
         ),
         onPressed: () {
           onTap();
         },
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Image.asset(
-                image,
-                width: 30,
-                color: Colors.white,
-              ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/pagebg.png"),
+              fit: BoxFit.cover,
             ),
-            SizedBox(width: 15),
-            Expanded(
-              child: Text(
-                text,
-                style: TextStyle(
+          ),
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Image.asset(
+                  image,
+                  width: 30,
                   color: Colors.white,
-                  fontSize: 15,
                 ),
               ),
-            ),
-          ],
+              SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

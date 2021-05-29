@@ -36,6 +36,59 @@ class _UserHomePageState extends State<UserHomePage> {
     );
   }
 
+  viewDetails(userData) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(
+          'User details',
+          style: TextStyle(
+            color: primaryColor,
+            fontSize: 18,
+          ),
+        ),
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            SizedBox(height: 30),
+            DetailTile(
+              icon: Icons.account_circle,
+              text: userData["userDetails"]["firstName"].toString() +
+                  ' ' +
+                  userData["userDetails"]["lastName"].toString(),
+            ),
+            DetailTile(
+              icon: Icons.account_balance,
+              text: "Account balance: " +
+                  userData["userDetails"]["accBalance"].toString(),
+            ),
+            DetailTile(
+              icon: Icons.phone,
+              text: userData["userDetails"]["phoneNo"].toString(),
+            ),
+            DetailTile(
+              icon: Icons.email,
+              text: userData["userDetails"]["email"].toString(),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Close',
+              style: TextStyle(color: primaryColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   initState() {
     userData = getUserData();
     super.initState();
@@ -85,29 +138,16 @@ class _UserHomePageState extends State<UserHomePage> {
                         foregroundColor: Color(0xff444444),
                       ),
                       SizedBox(height: 20),
-                      // DetailTile(
-                      //   icon: Icons.account_circle,
-                      //   text: userData["userDetails"]["firstName"].toString() +
-                      //       ' ' +
-                      //       userData["userDetails"]["lastName"].toString(),
-                      // ),
-
-                      // DetailTile(
-                      //   icon: Icons.account_balance,
-                      //   text: "Account balance: " +
-                      //       userData["userDetails"]["accBalance"].toString(),
-                      // ),
-                      // DetailTile(
-                      //   icon: Icons.phone,
-                      //   text: userData["userDetails"]["phoneNo"].toString(),
-                      // ),
-                      // DetailTile(
-                      //   icon: Icons.email,
-                      //   text: userData["userDetails"]["email"].toString(),
-                      // ),
 
                       SizedBox(height: 10),
 
+                      HomeOptionCard(
+                        icon: Icons.history,
+                        onPressed: () {
+                          viewDetails(userData);
+                        },
+                        text: "View user details",
+                      ),
                       HomeOptionCard(
                         icon: Icons.history,
                         onPressed: () {
@@ -205,6 +245,7 @@ class DetailTile extends StatelessWidget {
           Icon(
             icon,
             color: lightBlack,
+            size: 20,
           ),
           SizedBox(width: 10),
           Expanded(
@@ -212,6 +253,7 @@ class DetailTile extends StatelessWidget {
               text,
               style: TextStyle(
                 color: lightBlack,
+                fontSize: 13,
               ),
             ),
           )

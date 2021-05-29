@@ -112,6 +112,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
                 onChanged: (value) {
                   phoneNumber = value;
                 },
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: "Phone number"),
                 validator: (value) {
                   if (value.isEmpty) return "Enter phone number";
