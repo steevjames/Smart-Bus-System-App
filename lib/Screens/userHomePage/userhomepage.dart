@@ -245,7 +245,7 @@ class DetailTile extends StatelessWidget {
           Icon(
             icon,
             color: lightBlack,
-            size: 20,
+            size: 25,
           ),
           SizedBox(width: 10),
           Expanded(
@@ -253,7 +253,7 @@ class DetailTile extends StatelessWidget {
               text,
               style: TextStyle(
                 color: lightBlack,
-                fontSize: 13,
+                fontSize: 14,
               ),
             ),
           )
