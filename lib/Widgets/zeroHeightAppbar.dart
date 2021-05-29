@@ -6,6 +6,7 @@ zeroHeightAppbar(BuildContext context, {Color color}) {
     preferredSize: Size.fromHeight(0.0),
     child: AppBar(
       backgroundColor: color ?? Colors.blue,
+      brightness: Brightness.dark,
     ),
   );
 }

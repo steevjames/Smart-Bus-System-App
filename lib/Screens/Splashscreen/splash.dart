@@ -38,15 +38,15 @@ class _SplashscreenState extends State<Splashscreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.white,
-                  Color(0xfffffff),
+                  primaryColor,
+                  Color(0xff444477),
                 ],
               ),
             ),
             child: Center(
               child: Image(
                 image: AssetImage("assets/pngicon.png"),
-                color: primaryColor,
+                color: Colors.white,
                 width: 100,
               ),
             ),
