@@ -142,7 +142,7 @@ class _UserHomePageState extends State<UserHomePage> {
                       SizedBox(height: 10),
 
                       HomeOptionCard(
-                        icon: Icons.history,
+                        icon: Icons.person,
                         onPressed: () {
                           viewDetails(userData);
                         },
