@@ -1,4 +1,3 @@
-import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,11 @@ class _ReportComplaintState extends State<ReportComplaint> {
     Navigator.of(context).pop();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      snackBar(
-        "Complaint Recieved",
+      SnackBar(
+        content: Text(
+          "Complaint Recieved",
+        ),
+        backgroundColor: Colors.blue,
       ),
     );
   }

@@ -59,12 +59,14 @@ class _UserLoginPageState extends State<UserLoginPage> {
         },
       ),
     );
+    print("got access token");
     var res = await http.post(
       Uri.parse("https://smart-bus-pass.herokuapp.com/api/login"),
       body: {
         "accessToken": accessToken,
       },
     );
+    print("finished thusss");
     print(res.body);
     print(res.statusCode);
     var responseBody = jsonDecode(res.body);

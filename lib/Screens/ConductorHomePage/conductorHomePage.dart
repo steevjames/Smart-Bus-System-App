@@ -47,8 +47,11 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      snackBar(
-        "QR Code Successfully verified",
+      SnackBar(
+        content: Text(
+          "QR Code Successfully verified",
+        ),
+        backgroundColor: Colors.blue,
       ),
     );
   }

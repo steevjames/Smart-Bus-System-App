@@ -1,4 +1,3 @@
-import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +25,11 @@ class _AddBalanceState extends State<AddBalance> {
     Navigator.of(context).pop();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      snackBar(
-        "Successfully added balance",
+      SnackBar(
+        content: Text(
+          "Successfully added balance",
+        ),
+        backgroundColor: Colors.blue,
       ),
     );
   }

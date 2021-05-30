@@ -1,4 +1,3 @@
-import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +21,11 @@ class _RefreshQRState extends State<RefreshQR> {
     Navigator.of(context).pop();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      snackBar(
-        "QR Code has been successfully refreshed",
+      SnackBar(
+        content: Text(
+          "QR Code has been successfully refreshed",
+        ),
+        backgroundColor: Colors.blue,
       ),
     );
   }
