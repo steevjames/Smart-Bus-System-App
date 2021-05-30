@@ -210,7 +210,7 @@ class _UserHomePageState extends State<UserHomePage> {
                         text: "Report Complaint",
                       ),
                       HomeOptionCard(
-                        icon: Icons.history,
+                        icon: Icons.logout,
                         onPressed: () {
                           logout();
                         },

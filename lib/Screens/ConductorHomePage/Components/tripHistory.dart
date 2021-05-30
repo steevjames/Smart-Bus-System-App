@@ -2,41 +2,27 @@ import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/material.dart';
 
-class UserTravelLog extends StatefulWidget {
+class PreviousTrips extends StatefulWidget {
   @override
-  _UserTravelLogState createState() => _UserTravelLogState();
+  _PreviousTripsState createState() => _PreviousTripsState();
 }
 
-class _UserTravelLogState extends State<UserTravelLog> {
+class _PreviousTripsState extends State<PreviousTrips> {
   Future travelData;
   var travelHistory = [
     {
-      "time": "5 am",
-      "date": "22 May",
-      "destination": "Trivandrum",
-      "from": "Kochi",
+      "time": "2 pm",
+      "date": "2 August",
+      "destination": "Kochi",
+      "from": "Chalakudy",
       "busID": "7615231523"
     },
     {
-      "time": "6 am",
-      "date": "21 May",
-      "destination": "Thrissur",
-      "from": "Kochi",
-      "busID": "7615231523"
-    },
-    {
-      "time": "7 am",
-      "date": "20 May",
-      "destination": "Aluva",
-      "from": "Kochi",
-      "busID": "7615231523"
-    },
-    {
-      "time": "8 am",
-      "date": "19 May",
-      "destination": "Kollam",
-      "from": "Kochi",
-      "busID": "7615231523"
+      "time": "2 pm",
+      "date": "2 August",
+      "destination": "Chalakudy",
+      "from": "Thrissur",
+      "busID": "7615231522"
     },
   ];
 
@@ -63,7 +49,7 @@ class _UserTravelLogState extends State<UserTravelLog> {
               showBackButton: true,
               topChildren: [
                 Text(
-                  "Travel History",
+                  "Previous Trips",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22,
@@ -87,7 +73,7 @@ class _UserTravelLogState extends State<UserTravelLog> {
               showBackButton: true,
               topChildren: [
                 Text(
-                  "Travel History",
+                  "Previout Trips",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22,

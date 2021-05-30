@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:busapp/Screens/ConductorHomePage/Components/qrCodeScan.dart';
+import 'package:busapp/Screens/ConductorHomePage/Components/tripHistory.dart';
 import 'package:busapp/Screens/homepage.dart';
 import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
@@ -161,7 +162,12 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                 HomeOptionCard(
                   icon: Icons.history,
                   onPressed: () {
-                    alertDialog(text: "Coming soon", context: context);
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => PreviousTrips(),
+                      ),
+                    );
                   },
                   text: "Trip History",
                 ),

@@ -105,7 +105,7 @@ class HomeOption extends StatelessWidget {
           onTap();
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 22),
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/pagebg.png"),
@@ -114,21 +114,22 @@ class HomeOption extends StatelessWidget {
           ),
           child: Row(
             children: [
+              SizedBox(width: 7),
               Padding(
                 padding: EdgeInsets.all(15.0),
                 child: Image.asset(
                   image,
-                  width: 30,
+                  width: 35,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(width: 15),
+              SizedBox(width: 10),
               Expanded(
                 child: Text(
                   text,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 15,
+                    fontSize: 16,
                   ),
                 ),
               ),
