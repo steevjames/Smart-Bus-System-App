@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
+import 'package:busapp/Screens/userHomePage/Components/locateBus.dart';
 import 'package:busapp/Screens/userHomePage/Components/myComplaints.dart';
 import 'package:busapp/Screens/userHomePage/Components/refreshQr.dart';
 import 'package:busapp/Screens/userHomePage/Components/reportComplaint.dart';
@@ -154,6 +155,18 @@ class _UserHomePageState extends State<UserHomePage> {
                           );
                         },
                         text: "View travel history",
+                      ),
+                      HomeOptionCard(
+                        icon: Icons.gps_fixed,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => LocateBus(),
+                            ),
+                          );
+                        },
+                        text: "Locate a Bus",
                       ),
                       // HomeOptionCard(
                       //   icon: Icons.money,

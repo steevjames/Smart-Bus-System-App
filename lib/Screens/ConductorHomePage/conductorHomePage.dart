@@ -7,6 +7,7 @@ import 'package:busapp/Widgets/theme.dart';
 import 'package:busapp/baseUrl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +19,7 @@ class ConductorHomePage extends StatefulWidget {
 class _ConductorHomePageState extends State<ConductorHomePage> {
   var conductorData;
   bool isQrLoading = false;
+  bool isLocationLoading = false;
 
   getConductorData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -90,6 +92,43 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
       print("Error $e");
       alertDialog(text: "Pass verification failed", context: context);
     }
+  }
+
+  updateLocation() async {
+    try {
+      setState(() {
+        isLocationLoading = true;
+      });
+      var conductorData = await getConductorData();
+      var loc = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.medium);
+
+      if (loc == null) throw Exception("Location Null");
+      var res = await http.post(
+        Uri.parse(baseUrl + "api/conductor/add_location"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "token " + conductorData["token"],
+        },
+        body: jsonEncode({
+          "busID": "100",
+          "xCoordinate": loc.latitude.toString(),
+          "yCoordinate": loc.longitude.toString(),
+        }),
+      );
+      print(res.body);
+      print(res.statusCode);
+
+      if (res.statusCode != 200) {
+        throw Exception("Operation failed: Status code not 200");
+      }
+    } catch (e) {
+      print("Error $e");
+      alertDialog(text: "Location Updation failed", context: context);
+    }
+    setState(() {
+      isLocationLoading = false;
+    });
   }
 
   scanQR() async {
@@ -198,39 +237,21 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                 //   },
                 //   text: "Start Trip",
                 // ),
-                // HomeOptionCard(
-                //   icon: Icons.history,
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       CupertinoPageRoute(
-                //         builder: (context) => PreviousTrips(),
-                //       ),
-                //     );
-                //   },
-                //   text: "Trip History",
-                // ),
-                HomeOptionCard(
-                  icon: Icons.location_on_outlined,
-                  onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    var conductorData = jsonDecode(prefs.get('coductorData'));
-                    var res = await http.post(
-                        Uri.parse(baseUrl + "api/conductor/add_location"),
-                        headers: {
-                          "Content-Type": "application/json",
-                          "Authorization": "token " + conductorData["token"],
+
+                isLocationLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(primaryColor),
+                        ),
+                      )
+                    : HomeOptionCard(
+                        icon: Icons.location_on_outlined,
+                        onPressed: () async {
+                          updateLocation();
                         },
-                        body: jsonEncode({
-                          "busID": "100",
-                          "xCoordinate": "2.564545",
-                          "yCoordinate": "50.10003",
-                        }));
-                    print(res.body);
-                  },
-                  text: "Location update",
-                ),
+                        text: "Location update",
+                      ),
                 HomeOptionCard(
                   icon: Icons.logout,
                   onPressed: () {

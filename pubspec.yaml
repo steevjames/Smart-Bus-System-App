@@ -18,6 +18,9 @@ dependencies:
   shared_preferences: ^2.0.5
   qr_flutter: ^4.0.0
   qr_code_scanner: ^0.4.0
+  geolocator: ^7.0.3
+  flutter_map: ^0.13.0
+  latlong2: ^0.8.0
 
 dev_dependencies:
   flutter_test:
