@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:busapp/Screens/ConductorHomePage/Components/qrCodeScan.dart';
-import 'package:busapp/Screens/ConductorHomePage/Components/tripHistory.dart';
-import 'package:busapp/Screens/homepage.dart';
-import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/homeOptionCard.dart';
 import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ConductorHomePage extends StatefulWidget {
   @override
@@ -21,26 +19,36 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
 
   getConductorData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.get('coductorData');
+    return jsonDecode(prefs.get('coductorData'));
   }
 
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('coductorData');
-    Navigator.pushReplacement(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => HomePage(),
-      ),
-    );
+    Navigator.pop(context);
   }
 
   verifyQR(String data) async {
     setState(() {
       isQrLoading = true;
     });
-
-    await Future.delayed(Duration(milliseconds: 1500));
+    var res = await http.post(
+      Uri.parse(
+          "https://smart-bus-pass.herokuapp.com/api/conductor/verify_pass"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "token " + conductorData["token"],
+      },
+      body: jsonEncode({
+        "email": conductorData["email"],
+        "To": "Thrissur",
+        "from": "Angamaly",
+        "busID": "10001",
+        "passCode": conductorData[""],
+      }),
+    );
+    print(res.body);
+    print(res.statusCode);
 
     setState(() {
       isQrLoading = false;
@@ -49,7 +57,7 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          "QR Code Successfully verified",
+          "An Error occured",
         ),
         backgroundColor: Colors.blue,
       ),
@@ -84,7 +92,7 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
         future: conductorData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var userData = jsonDecode(snapshot.data);
+            var userData = snapshot.data;
             print(userData["conductorDetails"]["phoneNo"]);
             return DefTemplate(
               showBackButton: true,
@@ -155,25 +163,25 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                         },
                         text: "Scan QR",
                       ),
-                HomeOptionCard(
-                  icon: Icons.travel_explore,
-                  onPressed: () {
-                    alertDialog(text: "Coming soon", context: context);
-                  },
-                  text: "Start Trip",
-                ),
-                HomeOptionCard(
-                  icon: Icons.history,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => PreviousTrips(),
-                      ),
-                    );
-                  },
-                  text: "Trip History",
-                ),
+                // HomeOptionCard(
+                //   icon: Icons.travel_explore,
+                //   onPressed: () {
+                //     alertDialog(text: "Coming soon", context: context);
+                //   },
+                //   text: "Start Trip",
+                // ),
+                // HomeOptionCard(
+                //   icon: Icons.history,
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       CupertinoPageRoute(
+                //         builder: (context) => PreviousTrips(),
+                //       ),
+                //     );
+                //   },
+                //   text: "Trip History",
+                // ),
                 HomeOptionCard(
                   icon: Icons.logout,
                   onPressed: () {

@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
-import 'package:busapp/Screens/homepage.dart';
-import 'package:busapp/Screens/userHomePage/Components/addBalance.dart';
 import 'package:busapp/Screens/userHomePage/Components/refreshQr.dart';
 import 'package:busapp/Screens/userHomePage/Components/reportComplaint.dart';
 import 'package:busapp/Screens/userHomePage/Components/travelHistory.dart';
@@ -28,12 +26,7 @@ class _UserHomePageState extends State<UserHomePage> {
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('userData');
-    Navigator.pushReplacement(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => HomePage(),
-      ),
-    );
+    Navigator.pop(context);
   }
 
   viewDetails(userData) {
@@ -160,18 +153,18 @@ class _UserHomePageState extends State<UserHomePage> {
                         },
                         text: "View travel history",
                       ),
-                      HomeOptionCard(
-                        icon: Icons.money,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => AddBalance(),
-                            ),
-                          );
-                        },
-                        text: "Add balance",
-                      ),
+                      // HomeOptionCard(
+                      //   icon: Icons.money,
+                      //   onPressed: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       CupertinoPageRoute(
+                      //         builder: (context) => AddBalance(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   text: "Add balance",
+                      // ),
                       HomeOptionCard(
                         icon: Icons.refresh,
                         onPressed: () {
