@@ -211,6 +211,27 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                 //   text: "Trip History",
                 // ),
                 HomeOptionCard(
+                  icon: Icons.local_activity,
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    var conductorData = jsonDecode(prefs.get('coductorData'));
+                    var res = await http.post(
+                        Uri.parse(baseUrl + "api/conductor/add_location"),
+                        headers: {
+                          "Content-Type": "application/json",
+                          "Authorization": "token " + conductorData["token"],
+                        },
+                        body: jsonEncode({
+                          "busID": "100",
+                          "xCoordinate": "2.564545",
+                          "yCoordinate": "50.10003",
+                        }));
+                    print(res.body);
+                  },
+                  text: "Location update",
+                ),
+                HomeOptionCard(
                   icon: Icons.logout,
                   onPressed: () {
                     logout();
