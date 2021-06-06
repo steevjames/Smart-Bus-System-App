@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
+import 'package:busapp/Screens/userHomePage/Components/myComplaints.dart';
 import 'package:busapp/Screens/userHomePage/Components/refreshQr.dart';
 import 'package:busapp/Screens/userHomePage/Components/reportComplaint.dart';
 import 'package:busapp/Screens/userHomePage/Components/travelHistory.dart';
@@ -202,6 +203,18 @@ class _UserHomePageState extends State<UserHomePage> {
                           );
                         },
                         text: "Report Complaint",
+                      ),
+                      HomeOptionCard(
+                        icon: Icons.view_compact_outlined,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => MyComplaints(),
+                            ),
+                          );
+                        },
+                        text: "My Complaints",
                       ),
                       HomeOptionCard(
                         icon: Icons.logout,

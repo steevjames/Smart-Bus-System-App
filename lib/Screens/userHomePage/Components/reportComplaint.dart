@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'package:busapp/Widgets/alert_dialog.dart';
+import 'package:busapp/baseUrl.dart';
+import 'package:http/http.dart' as http;
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportComplaint extends StatefulWidget {
   @override
@@ -9,12 +14,41 @@ class ReportComplaint extends StatefulWidget {
 
 class _ReportComplaintState extends State<ReportComplaint> {
   bool isLoading = false;
+  String complaint, busID;
 
   reportComplaint() async {
     setState(() {
       isLoading = true;
     });
-    await Future.delayed(Duration(milliseconds: 1500));
+
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var userData = jsonDecode(prefs.get('userData'));
+      var res = await http.post(Uri.parse(baseUrl + "api/report_complaint"),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "token " + userData["token"],
+          },
+          body: jsonEncode({
+            "complaint": complaint,
+            "busID": busID,
+            "userID": userData["userDetails"]["email"],
+          }));
+      print(res.body);
+      print(res.statusCode);
+
+      if (res.statusCode != 200) {
+        throw Exception("Operation failed: Status code not 200");
+      }
+    } catch (e) {
+      print("Error $e");
+      setState(() {
+        isLoading = false;
+      });
+      alertDialog(text: "Operation Failed", context: context);
+      return;
+    }
+
     setState(() {
       isLoading = false;
     });
@@ -25,7 +59,7 @@ class _ReportComplaintState extends State<ReportComplaint> {
         content: Text(
           "Complaint Recieved",
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
       ),
     );
   }
@@ -49,9 +83,33 @@ class _ReportComplaintState extends State<ReportComplaint> {
         SizedBox(
           width: MediaQuery.of(context).size.width * .8,
           child: TextFormField(
-            minLines: 2,
-            maxLines: 5,
+            onChanged: (val) {
+              busID = val;
+            },
+            decoration: InputDecoration(
+              hintText: 'Bus ID',
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 15),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .8,
+          child: TextFormField(
+            minLines: 5,
+            maxLines: 10,
             keyboardType: TextInputType.multiline,
+            onChanged: (val) {
+              complaint = val;
+            },
             decoration: InputDecoration(
               hintText: 'Add your complaint here',
               hintStyle: TextStyle(
@@ -59,7 +117,9 @@ class _ReportComplaintState extends State<ReportComplaint> {
                 fontSize: 14,
               ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
               ),
             ),
           ),
@@ -92,7 +152,7 @@ class _ReportComplaintState extends State<ReportComplaint> {
                         ),
                       ),
                     ),
-                    child: Text("Refresh QR Code"),
+                    child: Text("Report Complaint"),
                   ),
                 ),
               ),

@@ -211,7 +211,7 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                 //   text: "Trip History",
                 // ),
                 HomeOptionCard(
-                  icon: Icons.local_activity,
+                  icon: Icons.location_on_outlined,
                   onPressed: () async {
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
