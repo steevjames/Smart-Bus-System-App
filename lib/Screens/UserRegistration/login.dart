@@ -3,6 +3,7 @@ import 'package:busapp/Screens/userHomePage/userhomepage.dart';
 import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
 import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/theme.dart';
+import 'package:busapp/baseUrl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -61,7 +62,7 @@ class _UserLoginPageState extends State<UserLoginPage> {
     );
     print("got access token");
     var res = await http.post(
-      Uri.parse("https://smart-bus-pass.herokuapp.com/api/login"),
+      Uri.parse(baseUrl + "api/login"),
       body: {
         "accessToken": accessToken,
       },

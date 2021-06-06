@@ -1,3 +1,4 @@
+import 'package:busapp/Widgets/theme.dart';
 import 'package:flutter/material.dart';
 
 alertDialog({@required text, @required context}) {
@@ -5,7 +6,10 @@ alertDialog({@required text, @required context}) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        content: Text(text),
+        content: Text(
+          text,
+          style: TextStyle(color: primaryColor, fontSize: 14),
+        ),
       );
     },
   );

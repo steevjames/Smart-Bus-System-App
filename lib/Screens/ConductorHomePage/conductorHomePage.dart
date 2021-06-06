@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:busapp/Screens/ConductorHomePage/Components/qrCodeScan.dart';
+import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/homeOptionCard.dart';
 import 'package:busapp/Widgets/theme.dart';
+import 'package:busapp/baseUrl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,39 +31,65 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
   }
 
   verifyQR(String data) async {
-    setState(() {
-      isQrLoading = true;
-    });
-    var res = await http.post(
-      Uri.parse(
-          "https://smart-bus-pass.herokuapp.com/api/conductor/verify_pass"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "token " + conductorData["token"],
-      },
-      body: jsonEncode({
-        "email": conductorData["email"],
-        "To": "Thrissur",
-        "from": "Angamaly",
-        "busID": "10001",
-        "passCode": conductorData[""],
-      }),
-    );
-    print(res.body);
-    print(res.statusCode);
+    try {
+      var qrData = jsonDecode(data);
+      print(qrData);
+      setState(() {
+        isQrLoading = true;
+      });
+      var conductorData = await getConductorData();
 
-    setState(() {
-      isQrLoading = false;
-    });
+      var res = await http.post(
+        Uri.parse(baseUrl + "api/conductor/verify_pass"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "token " + conductorData["token"],
+        },
+        body: jsonEncode({
+          "email": qrData["userDetails"]["email"],
+          "to": "Thrissur",
+          "from": "Angamaly",
+          "busID": "10001",
+          "passCode": qrData["busPassID"],
+        }),
+      );
+      print(res.body);
+      print(res.statusCode);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "An Error occured",
-        ),
-        backgroundColor: Colors.blue,
-      ),
-    );
+      if (res.statusCode != 200) {
+        throw Exception("Operation failed: Status code not 200");
+      }
+
+      setState(() {
+        isQrLoading = false;
+      });
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 20),
+                Image.asset(
+                  "assets/conductor/tick.png",
+                  width: 70,
+                ),
+                SizedBox(height: 40),
+                Text(
+                  "Pass Successfully verified",
+                  style: TextStyle(color: primaryColor, fontSize: 14),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      print("Error $e");
+      alertDialog(text: "Pass verification failed", context: context);
+    }
   }
 
   scanQR() async {

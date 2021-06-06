@@ -26,7 +26,6 @@ class _QrcodeScanState extends State<QrcodeScan> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       result = scanData;
-      print("object");
       if (result != null) {
         controller?.dispose();
         Navigator.of(context).pop(result.code);

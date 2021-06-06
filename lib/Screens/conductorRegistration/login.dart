@@ -3,6 +3,7 @@ import 'package:busapp/Screens/ConductorHomePage/conductorHomePage.dart';
 import 'package:busapp/Screens/conductorRegistration/conductorRegistration.dart';
 import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/theme.dart';
+import 'package:busapp/baseUrl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -56,7 +57,7 @@ class _ConductorLoginState extends State<ConductorLogin> {
     //  send data to backend
 
     var res = await http.post(
-      Uri.parse("https://smart-bus-pass.herokuapp.com/api/conductor/login"),
+      Uri.parse(baseUrl + "api/conductor/login"),
       body: {
         "accessToken": accessToken,
       },

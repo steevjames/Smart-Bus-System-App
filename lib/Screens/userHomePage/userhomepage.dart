@@ -94,7 +94,8 @@ class _UserHomePageState extends State<UserHomePage> {
         future: userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var userData = jsonDecode(snapshot.data);
+            Map<String, dynamic> userData = jsonDecode(snapshot.data);
+            userData.remove("token");
             print(userData);
             return DefTemplate(
               showBackButton: true,
@@ -125,7 +126,7 @@ class _UserHomePageState extends State<UserHomePage> {
                       //   userData.toString(),
                       // ),
                       QrImage(
-                        data: userData.toString(),
+                        data: jsonEncode(userData),
                         version: QrVersions.auto,
                         size: 200.0,
                         foregroundColor: Color(0xff444444),

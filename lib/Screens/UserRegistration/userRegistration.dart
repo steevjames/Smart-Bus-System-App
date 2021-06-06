@@ -3,6 +3,7 @@ import 'package:busapp/Screens/userHomePage/userhomepage.dart';
 import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
+import 'package:busapp/baseUrl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,7 +35,7 @@ class _UserRegistrationPageState extends State<UserRegistrationPage> {
     print(accessToken);
     try {
       var res = await http.post(
-        Uri.parse("https://smart-bus-pass.herokuapp.com/api/user_registration"),
+        Uri.parse(baseUrl + "api/user_registration"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "token $accessToken",
