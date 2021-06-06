@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
+import 'package:busapp/baseUrl.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserTravelLog extends StatefulWidget {
   @override
@@ -41,8 +45,27 @@ class _UserTravelLogState extends State<UserTravelLog> {
   ];
 
   getTravelData() async {
-    await Future.delayed(Duration(milliseconds: 1500));
-    return travelHistory;
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var userData = jsonDecode(prefs.get('userData'));
+      var res = await http.get(
+        Uri.parse(baseUrl + "api/travelLog"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "token " + userData["token"],
+        },
+      );
+      print(res.body);
+      print(res.statusCode);
+
+      if (res.statusCode != 200) {
+        throw Exception("Operation failed: Status code not 200");
+      }
+      return travelHistory;
+    } catch (e) {
+      print("Error $e");
+      return travelHistory;
+    }
   }
 
   @override
