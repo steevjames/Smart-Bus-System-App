@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:busapp/Screens/ConductorHomePage/Components/qrCodeScan.dart';
+import 'package:busapp/Screens/ConductorHomePage/Components/tripDetails.dart';
 import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/homeOptionCard.dart';
@@ -20,6 +22,9 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
   var conductorData;
   bool isQrLoading = false;
   bool isLocationLoading = false;
+  Timer timer;
+  Color dotColor = Colors.transparent;
+  bool stopTimer = false;
 
   getConductorData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,7 +45,17 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
         isQrLoading = true;
       });
       var conductorData = await getConductorData();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var tripData = prefs.getString("tripData");
+      if (tripData == null) {
+        alertDialog(text: "No trip details entered", context: context);
+        setState(() {
+          isQrLoading = false;
+        });
+        return;
+      }
 
+      var tripInfo = jsonDecode(tripData);
       var res = await http.post(
         Uri.parse(baseUrl + "api/conductor/verify_pass"),
         headers: {
@@ -49,9 +64,9 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
         },
         body: jsonEncode({
           "email": qrData["userDetails"]["email"],
-          "to": "Thrissur",
-          "from": "Angamaly",
-          "busID": "10001",
+          "to": tripInfo["to"],
+          "from": tripInfo["from"],
+          "busID": tripInfo["busID"],
           "passCode": qrData["busPassID"],
         }),
       );
@@ -94,11 +109,24 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
     }
   }
 
+  updateLoc() {}
+
   updateLocation() async {
     try {
       setState(() {
         isLocationLoading = true;
       });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var tripData = prefs.getString("tripData");
+      if (tripData == null) {
+        alertDialog(text: "No trip details entered", context: context);
+        setState(() {
+          isLocationLoading = false;
+        });
+        return;
+      }
+      var tripInfo = jsonDecode(tripData);
       var conductorData = await getConductorData();
       var loc = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.medium);
@@ -111,7 +139,7 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
           "Authorization": "token " + conductorData["token"],
         },
         body: jsonEncode({
-          "busID": "100",
+          "busID": tripInfo["busID"],
           "xCoordinate": loc.latitude.toString(),
           "yCoordinate": loc.longitude.toString(),
         }),
@@ -142,13 +170,32 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
     verifyQR(value);
   }
 
+  startTimer() {
+    timer = Timer.periodic(Duration(seconds: 5), (timer) async {
+      if (stopTimer) return;
+      print("Updating Location");
+      setState(() {
+        dotColor = primaryColor;
+      });
+      updateLoc();
+      await Future.delayed(Duration(seconds: 2));
+      if (stopTimer) return;
+      setState(() {
+        dotColor = Colors.transparent;
+      });
+    });
+  }
+
   initState() {
+    startTimer();
     conductorData = getConductorData();
     super.initState();
   }
 
   @override
   void dispose() {
+    stopTimer = true;
+    timer.cancel();
     super.dispose();
   }
 
@@ -160,7 +207,6 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var userData = snapshot.data;
-            print(userData["conductorDetails"]["phoneNo"]);
             return DefTemplate(
               showBackButton: true,
               topChildren: [
@@ -237,17 +283,31 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                 //   },
                 //   text: "Start Trip",
                 // ),
-
+                HomeOptionCard(
+                  icon: Icons.dehaze_outlined,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => TripDetailsUpdation(),
+                      ),
+                    );
+                  },
+                  text: "Trip Details",
+                ),
                 isLocationLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(primaryColor),
+                    ? Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(primaryColor),
+                          ),
                         ),
                       )
                     : HomeOptionCard(
                         icon: Icons.location_on_outlined,
-                        onPressed: () async {
+                        onPressed: () {
                           updateLocation();
                         },
                         text: "Location update",
@@ -259,6 +319,14 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
                   },
                   text: "Logout",
                 ),
+                SizedBox(height: 50),
+                AnimatedContainer(
+                  duration: Duration(seconds: 1),
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: dotColor),
+                  height: 15,
+                  width: 15,
+                )
               ],
             );
           } else {
