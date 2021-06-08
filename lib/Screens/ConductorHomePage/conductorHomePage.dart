@@ -73,7 +73,13 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
       print(res.body);
       print(res.statusCode);
 
-      if (res.statusCode != 200) {
+      if (res.statusCode == 402) {
+        alertDialog(text: "Not Enough Balance", context: context);
+        setState(() {
+          isQrLoading = false;
+        });
+        return;
+      } else if (res.statusCode != 200) {
         throw Exception("Operation failed: Status code not 200");
       }
 
@@ -105,6 +111,9 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
       );
     } catch (e) {
       print("Error $e");
+      setState(() {
+        isQrLoading = false;
+      });
       alertDialog(text: "Pass verification failed", context: context);
     }
   }
