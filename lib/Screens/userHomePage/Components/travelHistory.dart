@@ -78,7 +78,13 @@ class _UserTravelLogState extends State<UserTravelLog> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 30),
                             child: Center(
-                              child: Text("No Records Found"),
+                              child: Text(
+                                "No Records Found",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
                           )
                         ]

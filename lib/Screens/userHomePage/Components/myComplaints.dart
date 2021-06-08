@@ -102,14 +102,29 @@ class _MyComplaintsState extends State<MyComplaints> {
                 ),
                 SizedBox(height: 20),
               ],
-              bottomChildren: List.generate(
-                travelHistory.length,
-                (index) => ComplaintCard(
-                  complaint: travelHistory[index]["complaint"],
-                  date: travelHistory[index]["date"],
-                  busId: travelHistory[index]["busID"],
-                ),
-              ),
+              bottomChildren: travelHistory.length == 0
+                  ? [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        child: Center(
+                          child: Text(
+                            "No Records Found",
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      )
+                    ]
+                  : List.generate(
+                      travelHistory.length,
+                      (index) => ComplaintCard(
+                        complaint: travelHistory[index]["complaint"],
+                        date: travelHistory[index]["date"],
+                        busId: travelHistory[index]["busID"],
+                      ),
+                    ),
             );
           } else {
             return DefTemplate(

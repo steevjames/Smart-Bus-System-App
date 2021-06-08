@@ -1,6 +1,12 @@
+import 'dart:convert';
+import 'package:busapp/Screens/userHomePage/userhomepage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
+import 'package:busapp/baseUrl.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RefreshQR extends StatefulWidget {
   @override
@@ -14,20 +20,40 @@ class _RefreshQRState extends State<RefreshQR> {
     setState(() {
       isLoading = true;
     });
-    await Future.delayed(Duration(milliseconds: 1500));
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var userData = jsonDecode(prefs.get('userData'));
+      var res = await http.get(
+        Uri.parse(baseUrl + "api/refresh_qr"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "token " + userData["token"],
+        },
+      );
+      print(res.body);
+      print(res.statusCode);
+
+      if (res.statusCode != 200) {
+        throw Exception("Operation failed: Status code not 200");
+      }
+
+      await prefs.setString('userData', res.body);
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => UserHomePage(),
+        ),
+      );
+    } catch (e) {
+      print("Error $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
     setState(() {
       isLoading = false;
     });
-    Navigator.of(context).pop();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "QR Code has been successfully refreshed",
-        ),
-        backgroundColor: primaryColor,
-      ),
-    );
   }
 
   @override
