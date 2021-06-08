@@ -121,7 +121,7 @@ class _TripDetailsUpdationState extends State<TripDetailsUpdation> {
                       ),
                     ),
                   ),
-                  child: Text("Add balance"),
+                  child: Text("Update Trip Details"),
                 ),
               ),
         SizedBox(height: 20),

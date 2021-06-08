@@ -152,6 +152,9 @@ class _ConductorHomePageState extends State<ConductorHomePage> {
       }
     } catch (e) {
       print("Error $e");
+      setState(() {
+        isLocationLoading = false;
+      });
       alertDialog(text: "Location Updation failed", context: context);
     }
     setState(() {

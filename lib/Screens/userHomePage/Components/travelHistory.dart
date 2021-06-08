@@ -73,15 +73,24 @@ class _UserTravelLogState extends State<UserTravelLog> {
                         child: Center(child: Text("An Error occured")),
                       ),
                     ]
-                  : List.generate(
-                      travelHistory.length,
-                      (index) => TravelHistoryCard(
-                        from: travelHistory[index]["from_Location"],
-                        to: travelHistory[index]["to_Location"],
-                        date: travelHistory[index]["date"],
-                        busId: travelHistory[index]["busID"],
-                      ),
-                    ),
+                  : (travelHistory.length == 0
+                      ? [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 30),
+                            child: Center(
+                              child: Text("No Records Found"),
+                            ),
+                          )
+                        ]
+                      : List.generate(
+                          travelHistory.length,
+                          (index) => TravelHistoryCard(
+                            from: travelHistory[index]["from_Location"],
+                            to: travelHistory[index]["to_Location"],
+                            date: travelHistory[index]["date"],
+                            busId: travelHistory[index]["busID"],
+                          ),
+                        )),
             );
           } else {
             return DefTemplate(

@@ -25,7 +25,7 @@ class _RefreshQRState extends State<RefreshQR> {
         content: Text(
           "QR Code has been successfully refreshed",
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
       ),
     );
   }

@@ -29,7 +29,7 @@ class _AddBalanceState extends State<AddBalance> {
         content: Text(
           "Successfully added balance",
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
       ),
     );
   }
