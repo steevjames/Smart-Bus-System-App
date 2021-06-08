@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:busapp/Screens/UserRegistration/userRegistration.dart';
+import 'package:busapp/Screens/userHomePage/Components/addBalance.dart';
 import 'package:busapp/Screens/userHomePage/Components/locateBus.dart';
 import 'package:busapp/Screens/userHomePage/Components/myComplaints.dart';
 import 'package:busapp/Screens/userHomePage/Components/refreshQr.dart';
@@ -168,18 +169,18 @@ class _UserHomePageState extends State<UserHomePage> {
                         },
                         text: "Locate a Bus",
                       ),
-                      // HomeOptionCard(
-                      //   icon: Icons.money,
-                      //   onPressed: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       CupertinoPageRoute(
-                      //         builder: (context) => AddBalance(),
-                      //       ),
-                      //     );
-                      //   },
-                      //   text: "Add balance",
-                      // ),
+                      HomeOptionCard(
+                        icon: Icons.money,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => AddBalance(),
+                            ),
+                          );
+                        },
+                        text: "Add balance",
+                      ),
                       HomeOptionCard(
                         icon: Icons.refresh,
                         onPressed: () {

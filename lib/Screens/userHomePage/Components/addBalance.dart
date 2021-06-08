@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'package:busapp/Widgets/alert_dialog.dart';
+import 'package:http/http.dart' as http;
+import 'package:busapp/Screens/userHomePage/userhomepage.dart';
 import 'package:busapp/Widgets/defTemplate.dart';
 import 'package:busapp/Widgets/theme.dart';
+import 'package:busapp/baseUrl.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddBalance extends StatefulWidget {
   @override
@@ -15,23 +22,44 @@ class _AddBalanceState extends State<AddBalance> {
   final _formKey = GlobalKey<FormState>();
 
   addBalance() async {
+    if (!_formKey.currentState.validate()) return;
     setState(() {
       isLoading = true;
     });
-    await Future.delayed(Duration(milliseconds: 1500));
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var userData = jsonDecode(prefs.get('userData'));
+      var res = await http.post(Uri.parse(baseUrl + "api/add_balance"),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "token " + userData["token"],
+          },
+          body: jsonEncode(amount));
+      print(res.body);
+      print(res.statusCode);
+
+      if (res.statusCode != 200) {
+        throw Exception("Operation failed: Status code not 200");
+      }
+
+      await prefs.setString('userData', res.body);
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => UserHomePage(),
+        ),
+      );
+    } catch (e) {
+      print("Error $e");
+      alertDialog(text: "Operation Failed", context: context);
+      setState(() {
+        isLoading = false;
+      });
+    }
     setState(() {
       isLoading = false;
     });
-    Navigator.of(context).pop();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "Successfully added balance",
-        ),
-        backgroundColor: primaryColor,
-      ),
-    );
   }
 
   @override
@@ -65,6 +93,7 @@ class _AddBalanceState extends State<AddBalance> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: "Amount"),
               validator: (value) {
+                if (value.length > 3) return "Maximum amount to add is 1000";
                 if (value.isEmpty) return "Enter amount";
                 return null;
               },

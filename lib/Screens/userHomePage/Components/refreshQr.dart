@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:busapp/Screens/userHomePage/userhomepage.dart';
+import 'package:busapp/Widgets/alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:busapp/Widgets/defTemplate.dart';
@@ -39,7 +40,7 @@ class _RefreshQRState extends State<RefreshQR> {
 
       await prefs.setString('userData', res.body);
       Navigator.pop(context);
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         CupertinoPageRoute(
           builder: (context) => UserHomePage(),
@@ -47,6 +48,7 @@ class _RefreshQRState extends State<RefreshQR> {
       );
     } catch (e) {
       print("Error $e");
+      alertDialog(text: "Operation Failed", context: context);
       setState(() {
         isLoading = false;
       });
@@ -83,13 +85,19 @@ class _RefreshQRState extends State<RefreshQR> {
               ),
             ),
           ),
+          SizedBox(height: 60),
+          Icon(
+            Icons.qr_code_scanner_rounded,
+            size: 50,
+            color: primaryColor,
+          ),
           SizedBox(height: 30),
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: MediaQuery.of(context).size.width * .1),
             child: Center(
               child: Text(
-                "If you procceed, all materials using the previous QRCode will be invalidated",
+                "If you procceed, all previous QRCodes will be invalidated",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Color(0xff555555), fontSize: 15),
               ),
